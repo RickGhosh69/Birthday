@@ -212,7 +212,7 @@ section {
 
 /* Ends masonry + creates responsive gap */
 .gallery-break {
-    margin-top: 12rem;
+    margin-top: 18rem;
     break-after: column;
     width: 100%;
     height: 120px;
