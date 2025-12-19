@@ -196,50 +196,12 @@ section {
     display: inline-block;
 }
 
-.gallery-section {
-    position: relative;
-    padding-bottom: 120px;
-    /* forces masonry to visually end */
-}
 
-/* Force clear gap AFTER all gallery columns end */
-.gallery::after {
-    content: "";
-    display: block;
-    height: 120px;
-    /* adjust if you want more/less gap */
-}
 
-/* Ends masonry + creates responsive gap */
-.gallery-break {
-    margin-top: 18rem;
-    break-after: column;
-    width: 100%;
-    height: 120px;
-    /* desktop gap */
-}
 
 @media (max-width: 600px) {
     .gallery-break {
         height: 64px;
-        /* smaller, clean mobile gap */
-    }
-}
-
-
-@media (max-width: 900px) {
-    .gallery-break {
-        margin-top: 60rem;
-        height: 64px;
-        /* smaller, clean mobile gap */
-    }
-}
-
-
-@media (max-width: 480px) {
-    .gallery-break {
-        margin-top: 125rem;
-        height: 32px;
         /* smaller, clean mobile gap */
     }
 }
@@ -306,10 +268,28 @@ section {
     position: relative;
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(15px);
-    padding: 30px;
+    padding: 20px; /* slightly reduced padding to fit more content */
     border-radius: 20px;
     max-width: 400px;
+    width: calc(100% - 40px); /* keep a small page margin on very small screens */
+    max-height: 80vh; /* limit height so popup fits viewport */
+    overflow-y: auto; /* allow vertical scrolling when content is tall */
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* let content fill width */
+    gap: 12px;
 }
+
+audio {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin: 6px 0;
+    opacity: 1;
+    visibility: visible;
+}
+
 
 #closePopup {
     position: absolute;
@@ -317,6 +297,26 @@ section {
     right: 14px;
     font-size: 26px;
     cursor: pointer;
+}
+
+/* Responsive video inside popup */
+.popup-video {
+    width: 100%;
+    max-width: 100%;
+    max-height: 35vh; /* smaller so messages remain visible by default */
+    height: auto;
+    object-fit: contain; /* make poster & video fit without cropping */
+    border-radius: 12px;
+    display: block;
+    margin-top: 0;
+    align-self: center;
+}
+
+/* On larger screens, allow the popup to be wider so video can show larger */
+@media (min-width: 700px) {
+    .popup-content {
+        max-width: 720px;
+    }
 }
 
 /* Floating hearts */
@@ -389,4 +389,12 @@ audio {
 audio::-webkit-media-controls-panel {
     background-color: #bdabab98;
     border-radius: 12px;
+}
+
+.gallery-image {
+  filter: blur(8px);
+  transition: filter 300ms ease;
+}
+.gallery-image:not(.lazy) {
+  filter: blur(0);
 }

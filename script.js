@@ -186,3 +186,39 @@ window.addEventListener("scroll", () => {
 /* ===== Night Tint ===== */
 const hour = new Date().getHours();
 if (hour >= 19 || hour <= 5) document.body.classList.add("night");
+
+// lazy-load using data-srcset and class 'lazy'
+document.addEventListener('DOMContentLoaded', () => {
+  const lazyImgs = document.querySelectorAll('img.lazy');
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const img = entry.target;
+        const srcset = img.dataset.srcset;
+        if (srcset) {
+          img.setAttribute('srcset', srcset);
+        }
+        // optional: swap src to slightly larger one to prevent tiny pixelation
+        img.src = img.src.replace('/w_400,', '/w_800,');
+        img.classList.remove('lazy');
+        obs.unobserve(img);
+      });
+    }, { rootMargin: '200px 0px' }); // preloads a bit before it enters viewport
+
+    lazyImgs.forEach(img => io.observe(img));
+  } else {
+    // fallback: load all
+    lazyImgs.forEach(img => {
+      img.setAttribute('srcset', img.dataset.srcset);
+      img.classList.remove('lazy');
+    });
+  }
+});
+
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    window.dispatchEvent(new Event("resize"));
+  }, 300);
+});
